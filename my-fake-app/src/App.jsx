@@ -1,7 +1,11 @@
-
+import { Shop } from "./components/Shop";
 
 function App() {
-  return <></>;
+  return (
+    <>
+      <Shop />
+    </>
+  );
 }
 
 export default App;
