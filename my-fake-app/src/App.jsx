@@ -1,9 +1,11 @@
-import { Shop } from "./components/Shop";
+import Filter from "./components/Filter";
+import ProductList from "./components/ProductList";
 
 function App() {
   return (
     <>
-      <Shop />
+      <Filter />
+      <ProductList />
     </>
   );
 }
