@@ -1,6 +1,7 @@
 // Filter.js
 import { useDispatch } from "react-redux";
-import { setFilter } from "./productsSlice";
+import { setFilter } from "../store/productsSlice";
+import "./filter.css";
 
 const Filter = () => {
   const dispatch = useDispatch();
