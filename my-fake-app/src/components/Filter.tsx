@@ -3,10 +3,10 @@ import { useDispatch } from "react-redux";
 import { setFilter } from "../store/productsSlice";
 import "./filter.css";
 
-const Filter = () => {
+const Filter: React.FC = () => {
   const dispatch = useDispatch();
 
-  const handleFilterChange = (event) => {
+  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(setFilter(event.target.value));
   };
 
