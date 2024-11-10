@@ -1,15 +1,6 @@
-// productsSlice.js
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 
-export const fetchProducts = createAsyncThunk(
-  "products/fetchProducts",
-  async () => {
-    const response = await axios.get("https://fakestoreapi.com/products");
-    return await response.data;
-  }
-);
 interface Product {
   id: number;
   title: string;
@@ -17,18 +8,13 @@ interface Product {
   category: string;
   image: string;
 }
+
 interface ProductsState {
-  products: Product[];
   filter: string;
-  status: "idle" | "loading" | "succeeded" | "failed";
-  error: string | null;
 }
 
 const initialState: ProductsState = {
-  products: [],
   filter: "",
-  status: "idle",
-  error: null,
 };
 
 const productsSlice = createSlice({
@@ -39,33 +25,24 @@ const productsSlice = createSlice({
       state.filter = action.payload;
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchProducts.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(
-        fetchProducts.fulfilled,
-        (state, action: PayloadAction<Product[]>) => {
-          state.status = "succeeded";
-          state.products = action.payload;
-        }
-      )
-      .addCase(fetchProducts.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message || "404";
-      });
-  },
 });
 
 export const { setFilter } = productsSlice.actions;
 
-export const selectFilteredProducts = (state: RootState) => {
-  const { products, filter } = state.products;
+export const selectFilteredProducts = (state: RootState): Product[] => {
+  const { filter } = state.products;
+  const productsQuery = state.productsApi.queries.getProducts;
+  const products = productsQuery?.data;
+
+  if (!Array.isArray(products)) {
+    return [];
+  }
+
   if (!filter) {
     return products;
   }
-  return products.filter((product) => product.category === filter);
+
+  return products.filter((product: Product) => product.category === filter);
 };
 
-export default productsSlice.reducer;
+export default productsSlice.reducer
